@@ -1,0 +1,19 @@
+---
+linters:
+    enable-all: true
+    disable:
+        - gomnd
+        - lll
+        - wsl
+
+run:
+    modules-download-mode: vendor
+
+issues:
+    max-issues-per-linter: 0
+    max-same-issues: 0
+    exclude-rules:
+      - path: _test\.go
+        linters:
+          - funlen
+          - dupl

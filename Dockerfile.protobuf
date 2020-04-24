@@ -1,0 +1,32 @@
+# vim: filetype=dockerfile
+FROM golang:1.14
+
+ARG PROTOBUF_VERSION
+
+RUN apt-get update \
+    && apt-get -y install unzip
+
+RUN curl -L -o protobuf.zip https://github.com/protocolbuffers/protobuf/releases/download/v${PROTOBUF_VERSION}/protoc-${PROTOBUF_VERSION}-linux-x86_64.zip \
+        && unzip protobuf.zip -d /usr/local \
+        && rm protobuf.zip \
+        && protoc --version
+
+ENV GO111MODULE=on
+
+ARG GRPC_VERSION
+
+RUN go get google.golang.org/grpc@${GRPC_VERSION}
+
+ARG PROTOC_VERSION
+
+RUN go get github.com/gogo/protobuf/protoc-gen-gofast@${PROTOC_VERSION}
+
+ARG USER
+ARG USERID
+ARG GROUP
+ARG GROUPID
+
+RUN groupadd -g ${GROUPID} ${GROUP} || exit 0
+RUN useradd -g ${GROUP} -u ${USERID} ${USER}
+
+USER ${USER}
