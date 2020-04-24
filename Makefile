@@ -45,6 +45,15 @@ protobuf:
 				--proto_path=. \
 				--gofast_out=plugins=grpc:. \
 				users/rpc/userspb/service.proto
+	docker run \
+		-v $(PWD):/go/src/$(PKG) \
+		-w /go/src/$(PKG) \
+		protobuf-${NAME} \
+			protoc \
+				--proto_path=. \
+				--gofast_out=plugins=grpc:. \
+				requests/rpc/requestspb/service.proto
+
 
 .PHONY: docker-build
 docker-build:
@@ -79,4 +88,3 @@ linter:
 				--out-format=line-number \
 				--print-issued-lines=false \
 				--timeout 3m
-

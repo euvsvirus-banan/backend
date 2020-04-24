@@ -14,10 +14,10 @@ import (
 
 type Service struct {
 	logger *logrus.Entry
-	users  *storage.UserStorage
+	users  *storage.UsersStorage
 }
 
-func New(logger *logrus.Entry, userData *storage.UserStorage) *Service {
+func New(logger *logrus.Entry, userData *storage.UsersStorage) *Service {
 	return &Service{
 		logger: logger,
 		users:  userData,

@@ -837,9 +837,10 @@ type UsersRPCClient interface {
 	AddUser(ctx context.Context, in *AddUserRequest, opts ...grpc.CallOption) (*AddUserResponse, error)
 	// Deletes an existing user
 	DeleteUser(ctx context.Context, in *DeleteUserRequest, opts ...grpc.CallOption) (*DeleteUserResponse, error)
-	// Updates an existing user, method requires passing all the information to the user
+	// Updates an existing user, method requires passing all the information about the user as
+	// the object is simply replaced
 	UpdateUser(ctx context.Context, in *UpdateUserRequest, opts ...grpc.CallOption) (*UpdateUserResponse, error)
-	// Retrieves all the users in the system
+	// Returns all the users in the system
 	GetUsers(ctx context.Context, in *GetUsersRequest, opts ...grpc.CallOption) (UsersRPC_GetUsersClient, error)
 }
 
@@ -927,9 +928,10 @@ type UsersRPCServer interface {
 	AddUser(context.Context, *AddUserRequest) (*AddUserResponse, error)
 	// Deletes an existing user
 	DeleteUser(context.Context, *DeleteUserRequest) (*DeleteUserResponse, error)
-	// Updates an existing user, method requires passing all the information to the user
+	// Updates an existing user, method requires passing all the information about the user as
+	// the object is simply replaced
 	UpdateUser(context.Context, *UpdateUserRequest) (*UpdateUserResponse, error)
-	// Retrieves all the users in the system
+	// Returns all the users in the system
 	GetUsers(*GetUsersRequest, UsersRPC_GetUsersServer) error
 }
 

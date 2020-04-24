@@ -1,0 +1,74 @@
+syntax = "proto3";
+
+package requestspb;
+
+message Request {
+	string title = 1;
+	string body = 2;
+	string requester_id = 3;
+	string creation_date = 4;
+	string update_date = 5;
+	repeated string skills = 6;
+}
+
+message GetVersionRequest {
+}
+
+message GetVersionResponse {
+	string project = 1;
+	string version = 2;
+	string build_date = 3;
+	string git_revision = 4;
+	string go_version = 5;
+}
+
+message AddRequestRequest {
+	Request request = 1;
+}
+
+message AddRequestResponse {
+	string request_id = 1;
+}
+
+message DeleteRequestRequest {
+	string request_id = 1;
+}
+
+message DeleteRequestResponse {
+}
+
+message UpdateRequestRequest {
+	string request_id = 1;
+	Request request = 2;
+}
+
+message UpdateRequestResponse {
+	Request request = 1;
+}
+
+message GetRequestsRequest {
+}
+
+message GetRequestsResponse {
+	string request_id = 1;
+	Request request = 2;
+}
+
+service RequestsRPC {
+	// Returns software version and build details
+	rpc GetVersion(GetVersionRequest) returns (GetVersionResponse);
+
+	// Adds a new request
+	rpc AddRequest(AddRequestRequest) returns (AddRequestResponse);
+
+	// Deletes an existing request
+	rpc DeleteRequest(DeleteRequestRequest) returns (DeleteRequestResponse);
+
+	// Updates an existing request, method requires passing all the information about the request as
+	// the object is simply replaced
+	rpc UpdateRequest(UpdateRequestRequest) returns (UpdateRequestResponse);
+
+	// Returns all the users in the system
+	rpc GetRequests(GetRequestsRequest) returns (stream GetRequestsResponse);
+}
+

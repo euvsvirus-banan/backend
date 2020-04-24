@@ -35,9 +35,9 @@ user::address::address (TYPE_STRING) => somewhere
 user::address::city (TYPE_STRING) => Stockholm
 user::address::postcode (TYPE_STRING) => 12345
 user::address::country (TYPE_STRING) => Sweden
-‚úî PHONE
+ PHONE
 <repeated> user::contact_details::identifier (TYPE_STRING) => 070123456
-‚úî EMAIL
+ EMAIL
 <repeated> user::contact_details::identifier (TYPE_STRING) => asd@somewhere.com
 
 <repeated> user::contact_details::skills (TYPE_STRING) => plumbing
@@ -113,17 +113,17 @@ userspb.UsersRPC@localhost:65010> call GetUsers
 You can also use it this way:
 
 ```
-$ evans cli -r --host localhost --port 65010 --call AddUser -f data/requests/add_user_david.json
+$ evans cli -r --host localhost --port 65010 --call userspb.UsersRPC.AddUser -f data/requests/add_user_david.json
 {
   "userId": "8ce07df5-2d06-4b44-b2b0-a1e7df7c77e4"
 }
 
-$ evans cli -r --host localhost --port 65010 --call AddUser -f data/requests/add_user_pi.json
+$ evans cli -r --host localhost --port 65010 --call userspb.UsersRPC.AddUser -f data/requests/add_user_pi.json
 {
   "userId": "07f3999d-6037-4397-9a97-934af11f208a"
 }
 
-$ evans cli -r --host localhost --port 65010 --call GetUsers -f data/requests/get_users.json
+$ evans cli -r --host localhost --port 65010 --call userspb.UsersRPC.GetUsers -f data/requests/get_users.json
 {
   "userId": "8ce07df5-2d06-4b44-b2b0-a1e7df7c77e4",
   "user": {
