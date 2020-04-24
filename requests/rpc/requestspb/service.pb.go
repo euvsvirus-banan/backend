@@ -62,10 +62,11 @@ type Request struct {
 	Body                 string            `protobuf:"bytes,2,opt,name=body,proto3" json:"body,omitempty"`
 	RequesterId          string            `protobuf:"bytes,3,opt,name=requester_id,json=requesterId,proto3" json:"requester_id,omitempty"`
 	VolunteerId          string            `protobuf:"bytes,4,opt,name=volunteer_id,json=volunteerId,proto3" json:"volunteer_id,omitempty"`
-	CreationDate         string            `protobuf:"bytes,5,opt,name=creation_date,json=creationDate,proto3" json:"creation_date,omitempty"`
-	State                Request_State     `protobuf:"varint,6,opt,name=state,proto3,enum=requestspb.Request_State" json:"state,omitempty"`
-	Skills               []string          `protobuf:"bytes,7,rep,name=skills,proto3" json:"skills,omitempty"`
-	Answers              []*Request_Answer `protobuf:"bytes,8,rep,name=answers,proto3" json:"answers,omitempty"`
+	Postcode             string            `protobuf:"bytes,5,opt,name=postcode,proto3" json:"postcode,omitempty"`
+	CreationDate         string            `protobuf:"bytes,6,opt,name=creation_date,json=creationDate,proto3" json:"creation_date,omitempty"`
+	State                Request_State     `protobuf:"varint,7,opt,name=state,proto3,enum=requestspb.Request_State" json:"state,omitempty"`
+	Skills               []string          `protobuf:"bytes,8,rep,name=skills,proto3" json:"skills,omitempty"`
+	Answers              []*Request_Answer `protobuf:"bytes,9,rep,name=answers,proto3" json:"answers,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}          `json:"-"`
 	XXX_unrecognized     []byte            `json:"-"`
 	XXX_sizecache        int32             `json:"-"`
@@ -128,6 +129,13 @@ func (m *Request) GetRequesterId() string {
 func (m *Request) GetVolunteerId() string {
 	if m != nil {
 		return m.VolunteerId
+	}
+	return ""
+}
+
+func (m *Request) GetPostcode() string {
+	if m != nil {
+		return m.Postcode
 	}
 	return ""
 }
@@ -709,6 +717,202 @@ func (m *GetRequestsResponse) GetRequest() *Request {
 	return nil
 }
 
+type GetRequestByIDRequest struct {
+	RequestId            string   `protobuf:"bytes,1,opt,name=request_id,json=requestId,proto3" json:"request_id,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *GetRequestByIDRequest) Reset()         { *m = GetRequestByIDRequest{} }
+func (m *GetRequestByIDRequest) String() string { return proto.CompactTextString(m) }
+func (*GetRequestByIDRequest) ProtoMessage()    {}
+func (*GetRequestByIDRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7372dc30ae398822, []int{11}
+}
+func (m *GetRequestByIDRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GetRequestByIDRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_GetRequestByIDRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *GetRequestByIDRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetRequestByIDRequest.Merge(m, src)
+}
+func (m *GetRequestByIDRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *GetRequestByIDRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetRequestByIDRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetRequestByIDRequest proto.InternalMessageInfo
+
+func (m *GetRequestByIDRequest) GetRequestId() string {
+	if m != nil {
+		return m.RequestId
+	}
+	return ""
+}
+
+type GetRequestByIDResponse struct {
+	Request              *Request `protobuf:"bytes,1,opt,name=request,proto3" json:"request,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *GetRequestByIDResponse) Reset()         { *m = GetRequestByIDResponse{} }
+func (m *GetRequestByIDResponse) String() string { return proto.CompactTextString(m) }
+func (*GetRequestByIDResponse) ProtoMessage()    {}
+func (*GetRequestByIDResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7372dc30ae398822, []int{12}
+}
+func (m *GetRequestByIDResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GetRequestByIDResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_GetRequestByIDResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *GetRequestByIDResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetRequestByIDResponse.Merge(m, src)
+}
+func (m *GetRequestByIDResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *GetRequestByIDResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetRequestByIDResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetRequestByIDResponse proto.InternalMessageInfo
+
+func (m *GetRequestByIDResponse) GetRequest() *Request {
+	if m != nil {
+		return m.Request
+	}
+	return nil
+}
+
+type SearchRequestsByPostcodeRequest struct {
+	Postcode             string   `protobuf:"bytes,1,opt,name=postcode,proto3" json:"postcode,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *SearchRequestsByPostcodeRequest) Reset()         { *m = SearchRequestsByPostcodeRequest{} }
+func (m *SearchRequestsByPostcodeRequest) String() string { return proto.CompactTextString(m) }
+func (*SearchRequestsByPostcodeRequest) ProtoMessage()    {}
+func (*SearchRequestsByPostcodeRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7372dc30ae398822, []int{13}
+}
+func (m *SearchRequestsByPostcodeRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *SearchRequestsByPostcodeRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_SearchRequestsByPostcodeRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *SearchRequestsByPostcodeRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SearchRequestsByPostcodeRequest.Merge(m, src)
+}
+func (m *SearchRequestsByPostcodeRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *SearchRequestsByPostcodeRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_SearchRequestsByPostcodeRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_SearchRequestsByPostcodeRequest proto.InternalMessageInfo
+
+func (m *SearchRequestsByPostcodeRequest) GetPostcode() string {
+	if m != nil {
+		return m.Postcode
+	}
+	return ""
+}
+
+type SearchRequestsByPostcodeResponse struct {
+	RequestId            string   `protobuf:"bytes,1,opt,name=request_id,json=requestId,proto3" json:"request_id,omitempty"`
+	Request              *Request `protobuf:"bytes,2,opt,name=request,proto3" json:"request,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *SearchRequestsByPostcodeResponse) Reset()         { *m = SearchRequestsByPostcodeResponse{} }
+func (m *SearchRequestsByPostcodeResponse) String() string { return proto.CompactTextString(m) }
+func (*SearchRequestsByPostcodeResponse) ProtoMessage()    {}
+func (*SearchRequestsByPostcodeResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7372dc30ae398822, []int{14}
+}
+func (m *SearchRequestsByPostcodeResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *SearchRequestsByPostcodeResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_SearchRequestsByPostcodeResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *SearchRequestsByPostcodeResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SearchRequestsByPostcodeResponse.Merge(m, src)
+}
+func (m *SearchRequestsByPostcodeResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *SearchRequestsByPostcodeResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_SearchRequestsByPostcodeResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_SearchRequestsByPostcodeResponse proto.InternalMessageInfo
+
+func (m *SearchRequestsByPostcodeResponse) GetRequestId() string {
+	if m != nil {
+		return m.RequestId
+	}
+	return ""
+}
+
+func (m *SearchRequestsByPostcodeResponse) GetRequest() *Request {
+	if m != nil {
+		return m.Request
+	}
+	return nil
+}
+
 type AnswerRequestRequest struct {
 	RequestId            string          `protobuf:"bytes,1,opt,name=request_id,json=requestId,proto3" json:"request_id,omitempty"`
 	Answer               *Request_Answer `protobuf:"bytes,2,opt,name=answer,proto3" json:"answer,omitempty"`
@@ -721,7 +925,7 @@ func (m *AnswerRequestRequest) Reset()         { *m = AnswerRequestRequest{} }
 func (m *AnswerRequestRequest) String() string { return proto.CompactTextString(m) }
 func (*AnswerRequestRequest) ProtoMessage()    {}
 func (*AnswerRequestRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7372dc30ae398822, []int{11}
+	return fileDescriptor_7372dc30ae398822, []int{15}
 }
 func (m *AnswerRequestRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -774,7 +978,7 @@ func (m *AnswerRequestResponse) Reset()         { *m = AnswerRequestResponse{} }
 func (m *AnswerRequestResponse) String() string { return proto.CompactTextString(m) }
 func (*AnswerRequestResponse) ProtoMessage()    {}
 func (*AnswerRequestResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7372dc30ae398822, []int{12}
+	return fileDescriptor_7372dc30ae398822, []int{16}
 }
 func (m *AnswerRequestResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -815,7 +1019,7 @@ func (m *AcceptHelpRequest) Reset()         { *m = AcceptHelpRequest{} }
 func (m *AcceptHelpRequest) String() string { return proto.CompactTextString(m) }
 func (*AcceptHelpRequest) ProtoMessage()    {}
 func (*AcceptHelpRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7372dc30ae398822, []int{13}
+	return fileDescriptor_7372dc30ae398822, []int{17}
 }
 func (m *AcceptHelpRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -868,7 +1072,7 @@ func (m *AcceptHelpResponse) Reset()         { *m = AcceptHelpResponse{} }
 func (m *AcceptHelpResponse) String() string { return proto.CompactTextString(m) }
 func (*AcceptHelpResponse) ProtoMessage()    {}
 func (*AcceptHelpResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7372dc30ae398822, []int{14}
+	return fileDescriptor_7372dc30ae398822, []int{18}
 }
 func (m *AcceptHelpResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -908,7 +1112,7 @@ func (m *CompleteHelpRequest) Reset()         { *m = CompleteHelpRequest{} }
 func (m *CompleteHelpRequest) String() string { return proto.CompactTextString(m) }
 func (*CompleteHelpRequest) ProtoMessage()    {}
 func (*CompleteHelpRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7372dc30ae398822, []int{15}
+	return fileDescriptor_7372dc30ae398822, []int{19}
 }
 func (m *CompleteHelpRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -954,7 +1158,7 @@ func (m *CompleteHelpResponse) Reset()         { *m = CompleteHelpResponse{} }
 func (m *CompleteHelpResponse) String() string { return proto.CompactTextString(m) }
 func (*CompleteHelpResponse) ProtoMessage()    {}
 func (*CompleteHelpResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7372dc30ae398822, []int{16}
+	return fileDescriptor_7372dc30ae398822, []int{20}
 }
 func (m *CompleteHelpResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -994,7 +1198,7 @@ func (m *CancelHelpRequest) Reset()         { *m = CancelHelpRequest{} }
 func (m *CancelHelpRequest) String() string { return proto.CompactTextString(m) }
 func (*CancelHelpRequest) ProtoMessage()    {}
 func (*CancelHelpRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7372dc30ae398822, []int{17}
+	return fileDescriptor_7372dc30ae398822, []int{21}
 }
 func (m *CancelHelpRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1040,7 +1244,7 @@ func (m *CancelHelpResponse) Reset()         { *m = CancelHelpResponse{} }
 func (m *CancelHelpResponse) String() string { return proto.CompactTextString(m) }
 func (*CancelHelpResponse) ProtoMessage()    {}
 func (*CancelHelpResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7372dc30ae398822, []int{18}
+	return fileDescriptor_7372dc30ae398822, []int{22}
 }
 func (m *CancelHelpResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1083,6 +1287,10 @@ func init() {
 	proto.RegisterType((*UpdateRequestResponse)(nil), "requestspb.UpdateRequestResponse")
 	proto.RegisterType((*GetRequestsRequest)(nil), "requestspb.GetRequestsRequest")
 	proto.RegisterType((*GetRequestsResponse)(nil), "requestspb.GetRequestsResponse")
+	proto.RegisterType((*GetRequestByIDRequest)(nil), "requestspb.GetRequestByIDRequest")
+	proto.RegisterType((*GetRequestByIDResponse)(nil), "requestspb.GetRequestByIDResponse")
+	proto.RegisterType((*SearchRequestsByPostcodeRequest)(nil), "requestspb.SearchRequestsByPostcodeRequest")
+	proto.RegisterType((*SearchRequestsByPostcodeResponse)(nil), "requestspb.SearchRequestsByPostcodeResponse")
 	proto.RegisterType((*AnswerRequestRequest)(nil), "requestspb.AnswerRequestRequest")
 	proto.RegisterType((*AnswerRequestResponse)(nil), "requestspb.AnswerRequestResponse")
 	proto.RegisterType((*AcceptHelpRequest)(nil), "requestspb.AcceptHelpRequest")
@@ -1098,55 +1306,62 @@ func init() {
 }
 
 var fileDescriptor_7372dc30ae398822 = []byte{
-	// 763 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x56, 0xd1, 0x72, 0xd2, 0x4c,
-	0x14, 0x6e, 0xa0, 0x40, 0x39, 0xd0, 0x7f, 0x60, 0xa1, 0xfd, 0x91, 0x99, 0x22, 0x8d, 0xe3, 0x0c,
-	0x37, 0x82, 0x43, 0xeb, 0xbd, 0x34, 0x60, 0x65, 0x5a, 0x2b, 0xc6, 0x56, 0x2f, 0x19, 0x48, 0x76,
-	0x98, 0x68, 0x9a, 0xc4, 0x64, 0x8b, 0xe3, 0x9b, 0xf8, 0x04, 0xce, 0xf8, 0x26, 0x5e, 0xfa, 0x08,
-	0x4e, 0xbd, 0xf1, 0x31, 0x9c, 0xec, 0x6e, 0x48, 0x36, 0x49, 0x2b, 0xdc, 0x71, 0xce, 0x9e, 0xfd,
-	0xf6, 0x3b, 0xe7, 0x7c, 0x5f, 0x06, 0x78, 0xec, 0xe2, 0x4f, 0x37, 0xd8, 0x23, 0x5e, 0xcf, 0x75,
-	0xb4, 0x5e, 0x10, 0x38, 0xf3, 0x9e, 0x87, 0xdd, 0xa5, 0xa1, 0xe1, 0xae, 0xe3, 0xda, 0xc4, 0x46,
-	0x10, 0x9e, 0xc8, 0xdf, 0xb2, 0x50, 0x50, 0x59, 0x88, 0xea, 0x90, 0x23, 0x06, 0x31, 0x71, 0x43,
-	0x6a, 0x4b, 0x9d, 0xa2, 0xca, 0x02, 0x84, 0x60, 0x7b, 0x6e, 0xeb, 0x5f, 0x1a, 0x19, 0x9a, 0xa4,
-	0xbf, 0xd1, 0x21, 0x94, 0x39, 0x06, 0x76, 0xa7, 0x86, 0xde, 0xc8, 0xd2, 0xb3, 0xd2, 0x2a, 0x37,
-	0xd6, 0xfd, 0x92, 0xa5, 0x6d, 0xde, 0x58, 0x04, 0xb3, 0x92, 0x6d, 0x56, 0xb2, 0xca, 0x8d, 0x75,
-	0xf4, 0x08, 0x76, 0x35, 0x17, 0xcf, 0x88, 0x61, 0x5b, 0x53, 0x7d, 0x46, 0x70, 0x23, 0x47, 0x6b,
-	0xca, 0x41, 0x72, 0x38, 0x23, 0x18, 0xf5, 0x20, 0xe7, 0x11, 0xff, 0x30, 0xdf, 0x96, 0x3a, 0xff,
-	0xf5, 0x1f, 0x74, 0x43, 0xf2, 0x5d, 0x4e, 0xbc, 0xfb, 0xd6, 0x2f, 0x50, 0x59, 0x1d, 0xda, 0x87,
-	0xbc, 0xf7, 0xd1, 0x30, 0x4d, 0xaf, 0x51, 0x68, 0x67, 0x3b, 0x45, 0x95, 0x47, 0xe8, 0x18, 0x0a,
-	0x33, 0xcb, 0xfb, 0x8c, 0x5d, 0xaf, 0xb1, 0xd3, 0xce, 0x76, 0x4a, 0xfd, 0x66, 0x1a, 0xd4, 0x80,
-	0x96, 0xa8, 0x41, 0x69, 0x73, 0x04, 0x79, 0x96, 0x4a, 0x34, 0x24, 0x25, 0x1b, 0x6a, 0x40, 0x41,
-	0xb3, 0xaf, 0xaf, 0xb1, 0x45, 0xf8, 0xb4, 0x82, 0x50, 0x7e, 0x0e, 0x39, 0x4a, 0x12, 0x95, 0xa0,
-	0xf0, 0x7e, 0x30, 0xbe, 0x1c, 0x5f, 0x9c, 0x56, 0xb6, 0x50, 0x19, 0x76, 0x06, 0x8a, 0x32, 0x9a,
-	0x5c, 0x8e, 0x86, 0x15, 0x09, 0xed, 0x42, 0x51, 0x79, 0xfd, 0x6a, 0x72, 0x3e, 0xf2, 0xc3, 0x0c,
-	0x0d, 0x07, 0x17, 0xca, 0xe8, 0xfc, 0x7c, 0x34, 0xac, 0x64, 0xe5, 0x1a, 0x54, 0x4f, 0x31, 0x79,
-	0x87, 0x5d, 0xcf, 0xb0, 0x2d, 0xce, 0x56, 0xfe, 0x2e, 0x01, 0x8a, 0x66, 0x3d, 0xc7, 0xb6, 0x3c,
-	0xec, 0xf3, 0x70, 0x5c, 0xfb, 0x03, 0xd6, 0x08, 0x67, 0x19, 0x84, 0xfe, 0xc9, 0x92, 0x15, 0x07,
-	0x0c, 0x79, 0x88, 0x0e, 0x00, 0xe6, 0x37, 0x86, 0xa9, 0xb3, 0x4d, 0xb0, 0x85, 0x16, 0x69, 0x86,
-	0xae, 0xe1, 0x10, 0xca, 0x0b, 0x83, 0x4c, 0x5d, 0xbc, 0x34, 0xe8, 0x6d, 0xbe, 0xce, 0x85, 0x41,
-	0x54, 0x9e, 0xf2, 0x11, 0x16, 0xf6, 0x34, 0x80, 0x67, 0xbb, 0x2c, 0x2e, 0x6c, 0x4e, 0x4e, 0x3e,
-	0x81, 0xea, 0x40, 0xd7, 0x39, 0xf3, 0x40, 0x72, 0x4f, 0xa0, 0xc0, 0x97, 0x40, 0x99, 0x96, 0xfa,
-	0xb5, 0x94, 0xa5, 0xa8, 0x41, 0x8d, 0x7c, 0x04, 0x28, 0x8a, 0xc1, 0xdb, 0x3d, 0x80, 0x40, 0xd1,
-	0xe1, 0x5e, 0x8a, 0x3c, 0x33, 0xd6, 0xe5, 0x67, 0x50, 0x1f, 0x62, 0x13, 0x13, 0x1c, 0x7b, 0xfb,
-	0x1f, 0xd7, 0xfe, 0x87, 0xbd, 0xd8, 0x35, 0xf6, 0x9c, 0xac, 0x43, 0xfd, 0xca, 0xf1, 0xa7, 0xb4,
-	0x11, 0x5e, 0xb4, 0xd5, 0xcc, 0x1a, 0xad, 0xbe, 0x80, 0xbd, 0xd8, 0x2b, 0xbc, 0xdb, 0x0d, 0x47,
-	0x56, 0xa7, 0x0a, 0xe1, 0x69, 0x2f, 0x10, 0x8e, 0x06, 0x35, 0x21, 0xbb, 0xd6, 0x24, 0x37, 0x6d,
-	0xc1, 0x80, 0x3a, 0xb7, 0xd3, 0x46, 0x83, 0xea, 0x43, 0x9e, 0xb9, 0x8f, 0x3f, 0x72, 0x9f, 0x4f,
-	0x79, 0xa5, 0xbf, 0xac, 0xd8, 0x53, 0x7c, 0x59, 0x57, 0x50, 0x1d, 0x68, 0x1a, 0x76, 0xc8, 0x4b,
-	0x6c, 0x3a, 0x6b, 0x12, 0x88, 0x3b, 0x3d, 0x93, 0x70, 0xba, 0x3f, 0xd5, 0x28, 0x2c, 0x7f, 0xec,
-	0x18, 0x6a, 0x8a, 0x7d, 0xed, 0xf8, 0xa2, 0x59, 0xff, 0x39, 0x79, 0x1f, 0xea, 0xe2, 0x2d, 0x8e,
-	0xd6, 0x87, 0xaa, 0x32, 0xb3, 0x34, 0x6c, 0x6e, 0x80, 0x55, 0x07, 0x14, 0xbd, 0xc3, 0x90, 0xfa,
-	0x7f, 0x72, 0x50, 0x5a, 0xed, 0x7a, 0xa2, 0xa0, 0x33, 0x80, 0xf0, 0xab, 0x81, 0x0e, 0xa2, 0xf3,
-	0x4d, 0x7c, 0x63, 0x9a, 0xad, 0xbb, 0x8e, 0xb9, 0x66, 0xce, 0x00, 0x42, 0x4f, 0x8a, 0x60, 0x09,
-	0xbf, 0x8b, 0x60, 0x29, 0x56, 0xbe, 0x84, 0x5d, 0xc1, 0x74, 0xa8, 0x1d, 0xbd, 0x90, 0x66, 0xe3,
-	0xe6, 0xe1, 0x3d, 0x15, 0x21, 0xaa, 0xe0, 0x25, 0x11, 0x35, 0xcd, 0xcc, 0x22, 0x6a, 0xba, 0x11,
-	0x27, 0x50, 0x8a, 0x78, 0x08, 0xc5, 0xe7, 0x14, 0xb3, 0x5c, 0xf3, 0xe1, 0x9d, 0xe7, 0x0c, 0xef,
-	0xa9, 0xe4, 0xf3, 0x14, 0x54, 0x2c, 0xf2, 0x4c, 0xf3, 0x92, 0xc8, 0x33, 0xd5, 0x02, 0x74, 0x41,
-	0x2b, 0xad, 0xc6, 0x16, 0x14, 0xb7, 0x46, 0x6c, 0x41, 0x09, 0x89, 0xa3, 0x37, 0x50, 0x8e, 0x8a,
-	0x15, 0x09, 0x5d, 0xa5, 0x88, 0xbf, 0xd9, 0xbe, 0xbb, 0x20, 0xe4, 0x17, 0x6a, 0x56, 0xe4, 0x97,
-	0xd0, 0xbf, 0xc8, 0x2f, 0x29, 0xf5, 0x93, 0xca, 0x8f, 0xdb, 0x96, 0xf4, 0xf3, 0xb6, 0x25, 0xfd,
-	0xba, 0x6d, 0x49, 0x5f, 0x7f, 0xb7, 0xb6, 0xe6, 0x79, 0xfa, 0xa7, 0xe7, 0xe8, 0x6f, 0x00, 0x00,
-	0x00, 0xff, 0xff, 0x5b, 0xc8, 0x7a, 0x8c, 0x1d, 0x09, 0x00, 0x00,
+	// 869 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x56, 0xcd, 0x6e, 0xda, 0x58,
+	0x14, 0x8e, 0x21, 0x40, 0x38, 0x40, 0x04, 0x17, 0x92, 0xf1, 0x58, 0x0a, 0x01, 0x8f, 0x46, 0x42,
+	0x9a, 0x19, 0x18, 0x91, 0xcc, 0xec, 0x2a, 0x95, 0xbf, 0xa6, 0x28, 0x69, 0x4a, 0x09, 0x69, 0x96,
+	0x08, 0xec, 0x2b, 0xea, 0xd6, 0xc1, 0xae, 0x7d, 0x43, 0x94, 0x37, 0xe9, 0x2b, 0xf4, 0x15, 0xba,
+	0xec, 0xaa, 0xcb, 0x3e, 0x42, 0x95, 0xbe, 0x48, 0x65, 0xfb, 0x1a, 0xfb, 0xda, 0x26, 0x81, 0x4a,
+	0xdd, 0xf9, 0x9c, 0x7b, 0xce, 0x77, 0xfe, 0x3f, 0x19, 0xfe, 0x34, 0xf0, 0xfb, 0x1b, 0x6c, 0x12,
+	0xb3, 0x61, 0xe8, 0x52, 0xc3, 0x15, 0xf4, 0x69, 0xc3, 0xc4, 0xc6, 0x42, 0x91, 0x70, 0x5d, 0x37,
+	0x34, 0xa2, 0x21, 0xf0, 0x5e, 0xc4, 0xcf, 0x71, 0x48, 0x0d, 0x1d, 0x11, 0x95, 0x20, 0x41, 0x14,
+	0xa2, 0x62, 0x9e, 0xab, 0x70, 0xb5, 0xf4, 0xd0, 0x11, 0x10, 0x82, 0xed, 0xa9, 0x26, 0xdf, 0xf1,
+	0x31, 0x5b, 0x69, 0x7f, 0xa3, 0x2a, 0x64, 0x29, 0x06, 0x36, 0xc6, 0x8a, 0xcc, 0xc7, 0xed, 0xb7,
+	0xcc, 0x52, 0xd7, 0x97, 0x2d, 0x93, 0x85, 0xa6, 0xde, 0xcc, 0x09, 0x76, 0x4c, 0xb6, 0x1d, 0x93,
+	0xa5, 0xae, 0x2f, 0x23, 0x01, 0x76, 0x74, 0xcd, 0x24, 0x92, 0x26, 0x63, 0x3e, 0x61, 0x3f, 0x2f,
+	0x65, 0xf4, 0x07, 0xe4, 0x24, 0x03, 0x4f, 0x88, 0xa2, 0xcd, 0xc7, 0xf2, 0x84, 0x60, 0x3e, 0x69,
+	0x1b, 0x64, 0x5d, 0x65, 0x77, 0x42, 0x30, 0x6a, 0x40, 0xc2, 0x24, 0xd6, 0x63, 0xaa, 0xc2, 0xd5,
+	0x76, 0x9b, 0xbf, 0xd7, 0xbd, 0xc2, 0xea, 0xb4, 0xa8, 0xfa, 0x85, 0x65, 0x30, 0x74, 0xec, 0xd0,
+	0x3e, 0x24, 0xcd, 0x77, 0x8a, 0xaa, 0x9a, 0xfc, 0x4e, 0x25, 0x5e, 0x4b, 0x0f, 0xa9, 0x84, 0x8e,
+	0x21, 0x35, 0x99, 0x9b, 0xb7, 0xd8, 0x30, 0xf9, 0x74, 0x25, 0x5e, 0xcb, 0x34, 0x85, 0x28, 0xa8,
+	0x96, 0x6d, 0x32, 0x74, 0x4d, 0x85, 0x1e, 0x24, 0x1d, 0x55, 0xa8, 0x58, 0x2e, 0x5c, 0x2c, 0x0f,
+	0x29, 0x49, 0xbb, 0xbe, 0xc6, 0x73, 0x42, 0x3b, 0xe9, 0x8a, 0xe2, 0x53, 0x48, 0xd8, 0x49, 0xa2,
+	0x0c, 0xa4, 0xae, 0x5a, 0xfd, 0x51, 0xff, 0xfc, 0x24, 0xbf, 0x85, 0xb2, 0xb0, 0xd3, 0xea, 0x74,
+	0x7a, 0x83, 0x51, 0xaf, 0x9b, 0xe7, 0x50, 0x0e, 0xd2, 0x9d, 0x97, 0x2f, 0x06, 0x67, 0x3d, 0x4b,
+	0x8c, 0xd9, 0x62, 0xeb, 0xbc, 0xd3, 0x3b, 0x3b, 0xeb, 0x75, 0xf3, 0x71, 0xb1, 0x08, 0x85, 0x13,
+	0x4c, 0x5e, 0x63, 0xc3, 0x54, 0xb4, 0x39, 0xcd, 0x56, 0xfc, 0xc8, 0x01, 0xf2, 0x6b, 0x4d, 0x5d,
+	0x9b, 0x9b, 0xd8, 0xca, 0x43, 0x37, 0xb4, 0xb7, 0x58, 0x22, 0x34, 0x4b, 0x57, 0xb4, 0x5e, 0x16,
+	0x8e, 0xb1, 0x9b, 0x21, 0x15, 0xd1, 0x01, 0xc0, 0xf4, 0x46, 0x51, 0x65, 0x67, 0x12, 0xce, 0xb0,
+	0xd3, 0xb6, 0xc6, 0x1e, 0x43, 0x15, 0xb2, 0x33, 0x85, 0x8c, 0x0d, 0xbc, 0x50, 0x6c, 0x6f, 0x3a,
+	0xea, 0x99, 0x42, 0x86, 0x54, 0x65, 0x21, 0xcc, 0xb4, 0xb1, 0x0b, 0xef, 0x0c, 0x3b, 0x3d, 0xd3,
+	0x68, 0x72, 0x62, 0x1b, 0x0a, 0x2d, 0x59, 0xa6, 0x99, 0xbb, 0xeb, 0xf8, 0x0f, 0xa4, 0xe8, 0x10,
+	0xec, 0x4c, 0x33, 0xcd, 0x62, 0xc4, 0x50, 0x86, 0xae, 0x8d, 0x78, 0x04, 0xc8, 0x8f, 0x41, 0xcb,
+	0x3d, 0x00, 0x77, 0xdb, 0xbd, 0xb9, 0xa4, 0xa9, 0xa6, 0x2f, 0x8b, 0xff, 0x41, 0xa9, 0x8b, 0x55,
+	0x4c, 0x70, 0x20, 0xf6, 0x23, 0x6e, 0xbf, 0xc1, 0x5e, 0xc0, 0xcd, 0x09, 0x27, 0xca, 0x50, 0xba,
+	0xd4, 0xad, 0x2e, 0x6d, 0x84, 0xe7, 0x2f, 0x35, 0xb6, 0x46, 0xa9, 0xcf, 0x60, 0x2f, 0x10, 0x85,
+	0x56, 0xbb, 0x61, 0xcb, 0x4a, 0xf6, 0x86, 0x50, 0xb5, 0xe9, 0x2e, 0x8e, 0x04, 0x45, 0x46, 0xbb,
+	0x56, 0x27, 0x37, 0x2d, 0xe1, 0x7f, 0xd8, 0xf3, 0x82, 0xb4, 0xef, 0xfa, 0xdd, 0x35, 0x3b, 0x7f,
+	0x02, 0xfb, 0x41, 0xbf, 0x9f, 0xab, 0xfd, 0x09, 0x1c, 0x5e, 0xe0, 0x89, 0x21, 0xbd, 0x71, 0x0b,
+	0x6d, 0xdf, 0x0d, 0x28, 0xf9, 0xb8, 0xa9, 0xf8, 0xf9, 0x89, 0x63, 0xf9, 0x49, 0xd4, 0xa1, 0xb2,
+	0xda, 0xfd, 0x97, 0x74, 0x4c, 0x81, 0x12, 0x25, 0xa0, 0x8d, 0x56, 0xab, 0x09, 0x49, 0x87, 0xaf,
+	0x68, 0x90, 0x87, 0x98, 0x8d, 0x5a, 0x5a, 0xeb, 0x1d, 0x08, 0x45, 0xd7, 0xfb, 0x12, 0x0a, 0x2d,
+	0x49, 0xc2, 0x3a, 0x79, 0x8e, 0x55, 0x7d, 0xcd, 0x04, 0x82, 0xdc, 0x18, 0x0b, 0x71, 0xa3, 0xb5,
+	0x87, 0x7e, 0x58, 0x1a, 0xec, 0x18, 0x8a, 0x1d, 0xed, 0x5a, 0xb7, 0xce, 0x6c, 0xfd, 0x70, 0xe2,
+	0x3e, 0x94, 0x58, 0x2f, 0x8a, 0xd6, 0x84, 0x42, 0x67, 0x32, 0x97, 0xb0, 0xba, 0x01, 0x56, 0x09,
+	0x90, 0xdf, 0xc7, 0x41, 0x6a, 0x7e, 0x4a, 0x41, 0x66, 0x79, 0x1d, 0x83, 0x0e, 0x3a, 0x05, 0xf0,
+	0x78, 0x16, 0x1d, 0xf8, 0xfb, 0x1b, 0x62, 0x65, 0xa1, 0xbc, 0xea, 0x99, 0xee, 0xcc, 0x29, 0x80,
+	0xc7, 0x62, 0x2c, 0x58, 0x88, 0x21, 0x59, 0xb0, 0x08, 0xf2, 0x1b, 0x41, 0x8e, 0xa1, 0x29, 0x54,
+	0xf1, 0x3b, 0x44, 0x11, 0x9f, 0x50, 0x7d, 0xc0, 0xc2, 0x43, 0x65, 0xd8, 0x87, 0x45, 0x8d, 0xa2,
+	0x3f, 0x16, 0x35, 0x9a, 0xba, 0x06, 0x90, 0xf1, 0xb1, 0x0e, 0x0a, 0xf6, 0x29, 0x40, 0x52, 0xc2,
+	0xe1, 0xca, 0x77, 0x07, 0xef, 0x5f, 0x0e, 0x5d, 0xc1, 0x2e, 0x4b, 0x15, 0xa8, 0x1a, 0xed, 0xe4,
+	0xa3, 0x1f, 0x41, 0x7c, 0xc8, 0x84, 0xa6, 0x7a, 0x0b, 0xfc, 0xaa, 0xdb, 0x47, 0x7f, 0xf9, 0xfd,
+	0x1f, 0x21, 0x18, 0xe1, 0xef, 0xf5, 0x8c, 0x97, 0x15, 0x8d, 0x20, 0xc7, 0xdc, 0x25, 0xdb, 0xf9,
+	0x28, 0x76, 0x60, 0x3b, 0x1f, 0x79, 0xd4, 0xf6, 0xca, 0x2d, 0xaf, 0x2f, 0xb0, 0x72, 0xc1, 0x63,
+	0x0f, 0xac, 0x5c, 0xe8, 0x68, 0xd1, 0x2b, 0xc8, 0xfa, 0xcf, 0x0f, 0x31, 0x73, 0x8a, 0x38, 0x67,
+	0xa1, 0xb2, 0xda, 0xc0, 0xcb, 0xcf, 0xbb, 0x42, 0x36, 0xbf, 0xd0, 0x45, 0xb3, 0xf9, 0x85, 0x8f,
+	0xb7, 0x9d, 0xff, 0x72, 0x5f, 0xe6, 0xbe, 0xde, 0x97, 0xb9, 0x6f, 0xf7, 0x65, 0xee, 0xc3, 0xf7,
+	0xf2, 0xd6, 0x34, 0x69, 0xff, 0x14, 0x1f, 0xfd, 0x08, 0x00, 0x00, 0xff, 0xff, 0x7e, 0xce, 0x9d,
+	0x3d, 0x3d, 0x0b, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -1172,6 +1387,8 @@ type RequestsRPCClient interface {
 	UpdateRequest(ctx context.Context, in *UpdateRequestRequest, opts ...grpc.CallOption) (*UpdateRequestResponse, error)
 	// Returns all the users in the system
 	GetRequests(ctx context.Context, in *GetRequestsRequest, opts ...grpc.CallOption) (RequestsRPC_GetRequestsClient, error)
+	GetRequestByID(ctx context.Context, in *GetRequestByIDRequest, opts ...grpc.CallOption) (*GetRequestByIDResponse, error)
+	SearchRequestsByPostcode(ctx context.Context, in *SearchRequestsByPostcodeRequest, opts ...grpc.CallOption) (RequestsRPC_SearchRequestsByPostcodeClient, error)
 	AnswerRequest(ctx context.Context, in *AnswerRequestRequest, opts ...grpc.CallOption) (*AnswerRequestResponse, error)
 	AcceptHelp(ctx context.Context, in *AcceptHelpRequest, opts ...grpc.CallOption) (*AcceptHelpResponse, error)
 	CompleteHelp(ctx context.Context, in *CompleteHelpRequest, opts ...grpc.CallOption) (*CompleteHelpResponse, error)
@@ -1254,6 +1471,47 @@ func (x *requestsRPCGetRequestsClient) Recv() (*GetRequestsResponse, error) {
 	return m, nil
 }
 
+func (c *requestsRPCClient) GetRequestByID(ctx context.Context, in *GetRequestByIDRequest, opts ...grpc.CallOption) (*GetRequestByIDResponse, error) {
+	out := new(GetRequestByIDResponse)
+	err := c.cc.Invoke(ctx, "/requestspb.RequestsRPC/GetRequestByID", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *requestsRPCClient) SearchRequestsByPostcode(ctx context.Context, in *SearchRequestsByPostcodeRequest, opts ...grpc.CallOption) (RequestsRPC_SearchRequestsByPostcodeClient, error) {
+	stream, err := c.cc.NewStream(ctx, &_RequestsRPC_serviceDesc.Streams[1], "/requestspb.RequestsRPC/SearchRequestsByPostcode", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &requestsRPCSearchRequestsByPostcodeClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type RequestsRPC_SearchRequestsByPostcodeClient interface {
+	Recv() (*SearchRequestsByPostcodeResponse, error)
+	grpc.ClientStream
+}
+
+type requestsRPCSearchRequestsByPostcodeClient struct {
+	grpc.ClientStream
+}
+
+func (x *requestsRPCSearchRequestsByPostcodeClient) Recv() (*SearchRequestsByPostcodeResponse, error) {
+	m := new(SearchRequestsByPostcodeResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 func (c *requestsRPCClient) AnswerRequest(ctx context.Context, in *AnswerRequestRequest, opts ...grpc.CallOption) (*AnswerRequestResponse, error) {
 	out := new(AnswerRequestResponse)
 	err := c.cc.Invoke(ctx, "/requestspb.RequestsRPC/AnswerRequest", in, out, opts...)
@@ -1303,6 +1561,8 @@ type RequestsRPCServer interface {
 	UpdateRequest(context.Context, *UpdateRequestRequest) (*UpdateRequestResponse, error)
 	// Returns all the users in the system
 	GetRequests(*GetRequestsRequest, RequestsRPC_GetRequestsServer) error
+	GetRequestByID(context.Context, *GetRequestByIDRequest) (*GetRequestByIDResponse, error)
+	SearchRequestsByPostcode(*SearchRequestsByPostcodeRequest, RequestsRPC_SearchRequestsByPostcodeServer) error
 	AnswerRequest(context.Context, *AnswerRequestRequest) (*AnswerRequestResponse, error)
 	AcceptHelp(context.Context, *AcceptHelpRequest) (*AcceptHelpResponse, error)
 	CompleteHelp(context.Context, *CompleteHelpRequest) (*CompleteHelpResponse, error)
@@ -1327,6 +1587,12 @@ func (*UnimplementedRequestsRPCServer) UpdateRequest(ctx context.Context, req *U
 }
 func (*UnimplementedRequestsRPCServer) GetRequests(req *GetRequestsRequest, srv RequestsRPC_GetRequestsServer) error {
 	return status.Errorf(codes.Unimplemented, "method GetRequests not implemented")
+}
+func (*UnimplementedRequestsRPCServer) GetRequestByID(ctx context.Context, req *GetRequestByIDRequest) (*GetRequestByIDResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetRequestByID not implemented")
+}
+func (*UnimplementedRequestsRPCServer) SearchRequestsByPostcode(req *SearchRequestsByPostcodeRequest, srv RequestsRPC_SearchRequestsByPostcodeServer) error {
+	return status.Errorf(codes.Unimplemented, "method SearchRequestsByPostcode not implemented")
 }
 func (*UnimplementedRequestsRPCServer) AnswerRequest(ctx context.Context, req *AnswerRequestRequest) (*AnswerRequestResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AnswerRequest not implemented")
@@ -1438,6 +1704,45 @@ func (x *requestsRPCGetRequestsServer) Send(m *GetRequestsResponse) error {
 	return x.ServerStream.SendMsg(m)
 }
 
+func _RequestsRPC_GetRequestByID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetRequestByIDRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(RequestsRPCServer).GetRequestByID(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/requestspb.RequestsRPC/GetRequestByID",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(RequestsRPCServer).GetRequestByID(ctx, req.(*GetRequestByIDRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _RequestsRPC_SearchRequestsByPostcode_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(SearchRequestsByPostcodeRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(RequestsRPCServer).SearchRequestsByPostcode(m, &requestsRPCSearchRequestsByPostcodeServer{stream})
+}
+
+type RequestsRPC_SearchRequestsByPostcodeServer interface {
+	Send(*SearchRequestsByPostcodeResponse) error
+	grpc.ServerStream
+}
+
+type requestsRPCSearchRequestsByPostcodeServer struct {
+	grpc.ServerStream
+}
+
+func (x *requestsRPCSearchRequestsByPostcodeServer) Send(m *SearchRequestsByPostcodeResponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
 func _RequestsRPC_AnswerRequest_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(AnswerRequestRequest)
 	if err := dec(in); err != nil {
@@ -1531,6 +1836,10 @@ var _RequestsRPC_serviceDesc = grpc.ServiceDesc{
 			Handler:    _RequestsRPC_UpdateRequest_Handler,
 		},
 		{
+			MethodName: "GetRequestByID",
+			Handler:    _RequestsRPC_GetRequestByID_Handler,
+		},
+		{
 			MethodName: "AnswerRequest",
 			Handler:    _RequestsRPC_AnswerRequest_Handler,
 		},
@@ -1551,6 +1860,11 @@ var _RequestsRPC_serviceDesc = grpc.ServiceDesc{
 		{
 			StreamName:    "GetRequests",
 			Handler:       _RequestsRPC_GetRequests_Handler,
+			ServerStreams: true,
+		},
+		{
+			StreamName:    "SearchRequestsByPostcode",
+			Handler:       _RequestsRPC_SearchRequestsByPostcode_Handler,
 			ServerStreams: true,
 		},
 	},
@@ -1592,7 +1906,7 @@ func (m *Request) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 				i = encodeVarintService(dAtA, i, uint64(size))
 			}
 			i--
-			dAtA[i] = 0x42
+			dAtA[i] = 0x4a
 		}
 	}
 	if len(m.Skills) > 0 {
@@ -1601,18 +1915,25 @@ func (m *Request) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			copy(dAtA[i:], m.Skills[iNdEx])
 			i = encodeVarintService(dAtA, i, uint64(len(m.Skills[iNdEx])))
 			i--
-			dAtA[i] = 0x3a
+			dAtA[i] = 0x42
 		}
 	}
 	if m.State != 0 {
 		i = encodeVarintService(dAtA, i, uint64(m.State))
 		i--
-		dAtA[i] = 0x30
+		dAtA[i] = 0x38
 	}
 	if len(m.CreationDate) > 0 {
 		i -= len(m.CreationDate)
 		copy(dAtA[i:], m.CreationDate)
 		i = encodeVarintService(dAtA, i, uint64(len(m.CreationDate)))
+		i--
+		dAtA[i] = 0x32
+	}
+	if len(m.Postcode) > 0 {
+		i -= len(m.Postcode)
+		copy(dAtA[i:], m.Postcode)
+		i = encodeVarintService(dAtA, i, uint64(len(m.Postcode)))
 		i--
 		dAtA[i] = 0x2a
 	}
@@ -2069,6 +2390,159 @@ func (m *GetRequestsResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *GetRequestByIDRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *GetRequestByIDRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetRequestByIDRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.XXX_unrecognized != nil {
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	if len(m.RequestId) > 0 {
+		i -= len(m.RequestId)
+		copy(dAtA[i:], m.RequestId)
+		i = encodeVarintService(dAtA, i, uint64(len(m.RequestId)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *GetRequestByIDResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *GetRequestByIDResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetRequestByIDResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.XXX_unrecognized != nil {
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	if m.Request != nil {
+		{
+			size, err := m.Request.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintService(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *SearchRequestsByPostcodeRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *SearchRequestsByPostcodeRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SearchRequestsByPostcodeRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.XXX_unrecognized != nil {
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	if len(m.Postcode) > 0 {
+		i -= len(m.Postcode)
+		copy(dAtA[i:], m.Postcode)
+		i = encodeVarintService(dAtA, i, uint64(len(m.Postcode)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *SearchRequestsByPostcodeResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *SearchRequestsByPostcodeResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SearchRequestsByPostcodeResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.XXX_unrecognized != nil {
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	if m.Request != nil {
+		{
+			size, err := m.Request.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintService(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.RequestId) > 0 {
+		i -= len(m.RequestId)
+		copy(dAtA[i:], m.RequestId)
+		i = encodeVarintService(dAtA, i, uint64(len(m.RequestId)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
 func (m *AnswerRequestRequest) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -2365,6 +2839,10 @@ func (m *Request) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovService(uint64(l))
 	}
+	l = len(m.Postcode)
+	if l > 0 {
+		n += 1 + l + sovService(uint64(l))
+	}
 	l = len(m.CreationDate)
 	if l > 0 {
 		n += 1 + l + sovService(uint64(l))
@@ -2563,6 +3041,74 @@ func (m *GetRequestsRequest) Size() (n int) {
 }
 
 func (m *GetRequestsResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.RequestId)
+	if l > 0 {
+		n += 1 + l + sovService(uint64(l))
+	}
+	if m.Request != nil {
+		l = m.Request.Size()
+		n += 1 + l + sovService(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *GetRequestByIDRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.RequestId)
+	if l > 0 {
+		n += 1 + l + sovService(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *GetRequestByIDResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Request != nil {
+		l = m.Request.Size()
+		n += 1 + l + sovService(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *SearchRequestsByPostcodeRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Postcode)
+	if l > 0 {
+		n += 1 + l + sovService(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *SearchRequestsByPostcodeResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -2867,6 +3413,38 @@ func (m *Request) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 5:
 			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Postcode", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowService
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthService
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthService
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Postcode = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field CreationDate", wireType)
 			}
 			var stringLen uint64
@@ -2897,7 +3475,7 @@ func (m *Request) Unmarshal(dAtA []byte) error {
 			}
 			m.CreationDate = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 6:
+		case 7:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field State", wireType)
 			}
@@ -2916,7 +3494,7 @@ func (m *Request) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
-		case 7:
+		case 8:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Skills", wireType)
 			}
@@ -2948,7 +3526,7 @@ func (m *Request) Unmarshal(dAtA []byte) error {
 			}
 			m.Skills = append(m.Skills, string(dAtA[iNdEx:postIndex]))
 			iNdEx = postIndex
-		case 8:
+		case 9:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Answers", wireType)
 			}
@@ -4002,6 +4580,390 @@ func (m *GetRequestsResponse) Unmarshal(dAtA []byte) error {
 		}
 		if fieldNum <= 0 {
 			return fmt.Errorf("proto: GetRequestsResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RequestId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowService
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthService
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthService
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.RequestId = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Request", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowService
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthService
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthService
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Request == nil {
+				m.Request = &Request{}
+			}
+			if err := m.Request.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipService(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthService
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthService
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *GetRequestByIDRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowService
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: GetRequestByIDRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: GetRequestByIDRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RequestId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowService
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthService
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthService
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.RequestId = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipService(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthService
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthService
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *GetRequestByIDResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowService
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: GetRequestByIDResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: GetRequestByIDResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Request", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowService
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthService
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthService
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Request == nil {
+				m.Request = &Request{}
+			}
+			if err := m.Request.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipService(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthService
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthService
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *SearchRequestsByPostcodeRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowService
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: SearchRequestsByPostcodeRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: SearchRequestsByPostcodeRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Postcode", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowService
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthService
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthService
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Postcode = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipService(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthService
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthService
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *SearchRequestsByPostcodeResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowService
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: SearchRequestsByPostcodeResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: SearchRequestsByPostcodeResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:

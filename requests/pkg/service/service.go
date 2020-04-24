@@ -76,6 +76,33 @@ func (svc *Service) GetRequests(req *requestspb.GetRequestsRequest, stream reque
 	return nil
 }
 
+func (svc *Service) GetRequestByID(ctx context.Context, req *requestspb.GetRequestByIDRequest) (*requestspb.GetRequestByIDResponse, error) {
+	request, err := svc.requests.Get(req.RequestId)
+	if err != nil {
+		return nil, status.Error(codes.NotFound, "request not found")
+	}
+	return &requestspb.GetRequestByIDResponse{
+		Request: request,
+	}, nil
+}
+
+func (svc *Service) SearchRequestsByPostcode(req *requestspb.SearchRequestsByPostcodeRequest, stream requestspb.RequestsRPC_SearchRequestsByPostcodeServer) error {
+	for id, request := range svc.requests.All() {
+		if request.Postcode != req.Postcode {
+			continue
+		}
+		if err := stream.Send(
+			&requestspb.SearchRequestsByPostcodeResponse{
+				RequestId: id,
+				Request:   request,
+			},
+		); err != nil {
+			return status.Error(codes.Unknown, err.Error())
+		}
+	}
+	return nil
+}
+
 func (svc *Service) AnswerRequest(ctx context.Context, req *requestspb.AnswerRequestRequest) (*requestspb.AnswerRequestResponse, error) {
 	request, err := svc.requests.Get(req.RequestId)
 	if err != nil {
