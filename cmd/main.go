@@ -33,7 +33,7 @@ func getLogger(debug bool) *logrus.Entry { // nolint: unparam
 	return logrus.NewEntry(l)
 }
 
-func startService(logger *logrus.Entry, addr string, userData *storage.UserStorage, requestData *storage.RequestStorage) error {
+func startService(logger *logrus.Entry, addr string, userData *storage.UsersStorage, requestData *storage.RequestsStorage) error {
 	logger.WithFields(
 		logrus.Fields{
 			"addr": addr,
@@ -72,7 +72,7 @@ func startService(logger *logrus.Entry, addr string, userData *storage.UserStora
 	return nil
 }
 
-func getUserData(file io.ReadWriteSeeker) (*storage.UserStorage, error) {
+func getUserData(file io.ReadWriteSeeker) (*storage.UsersStorage, error) {
 	data := make(map[string]*userspb.User)
 	b, err := ioutil.ReadAll(file)
 	if err != nil {
@@ -81,11 +81,11 @@ func getUserData(file io.ReadWriteSeeker) (*storage.UserStorage, error) {
 	if err := json.Unmarshal(b, &data); err != nil {
 		return nil, fmt.Errorf("problem unmarshalling user data: %w", err)
 	}
-	st := storage.NewUserStorage(file, data)
+	st := storage.NewUsersStorage(file, data)
 	return st, nil
 }
 
-func getRequestData(file io.ReadWriteSeeker) (*storage.RequestStorage, error) {
+func getRequestData(file io.ReadWriteSeeker) (*storage.RequestsStorage, error) {
 	data := make(map[string]*requestspb.Request)
 	b, err := ioutil.ReadAll(file)
 	if err != nil {
@@ -94,7 +94,7 @@ func getRequestData(file io.ReadWriteSeeker) (*storage.RequestStorage, error) {
 	if err := json.Unmarshal(b, &data); err != nil {
 		return nil, fmt.Errorf("problem unmarshalling request data: %w", err)
 	}
-	st := storage.NewRequestStorage(file, data)
+	st := storage.NewRequestsStorage(file, data)
 	return st, nil
 }
 

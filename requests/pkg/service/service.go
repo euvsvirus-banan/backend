@@ -75,3 +75,86 @@ func (svc *Service) GetRequests(req *requestspb.GetRequestsRequest, stream reque
 	}
 	return nil
 }
+
+func (svc *Service) AnswerRequest(ctx context.Context, req *requestspb.AnswerRequestRequest) (*requestspb.AnswerRequestResponse, error) {
+	request, err := svc.requests.Get(req.RequestId)
+	if err != nil {
+		return nil, status.Error(codes.NotFound, "request not found")
+	}
+
+	if request.State != requestspb.Request_WAITING {
+		return nil, status.Error(codes.InvalidArgument, "request already answered")
+	}
+
+	request.Answers = append(request.Answers, req.Answer)
+	if err := svc.requests.Update(req.RequestId, request); err != nil {
+		return nil, status.Error(codes.Internal, "problem saving data")
+	}
+	return &requestspb.AnswerRequestResponse{}, nil
+}
+
+func (svc *Service) AcceptHelp(ctx context.Context, req *requestspb.AcceptHelpRequest) (*requestspb.AcceptHelpResponse, error) {
+	request, err := svc.requests.Get(req.RequestId)
+	if err != nil {
+		return nil, status.Error(codes.NotFound, "request not found")
+	}
+
+	if request.State != requestspb.Request_WAITING {
+		return nil, status.Error(codes.InvalidArgument, "help already accepted or request cancelled")
+	}
+
+	var found bool
+	for _, a := range request.Answers {
+		if a.VolunteerId == req.VolunteerId {
+			found = true
+			break
+		}
+	}
+	if !found {
+		return nil, status.Error(codes.NotFound, "answer not found")
+	}
+
+	request.State = requestspb.Request_ACCEPTED
+	request.VolunteerId = req.VolunteerId
+
+	if err := svc.requests.Update(req.RequestId, request); err != nil {
+		return nil, status.Error(codes.Internal, "problem saving data")
+	}
+	return &requestspb.AcceptHelpResponse{}, nil
+}
+
+func (svc *Service) CompleteHelp(ctx context.Context, req *requestspb.CompleteHelpRequest) (*requestspb.CompleteHelpResponse, error) {
+	request, err := svc.requests.Get(req.RequestId)
+	if err != nil {
+		return nil, status.Error(codes.NotFound, "request not found")
+	}
+
+	if request.State != requestspb.Request_ACCEPTED {
+		return nil, status.Error(codes.InvalidArgument, "help isn't accepted")
+	}
+
+	request.State = requestspb.Request_COMPLETED
+
+	if err := svc.requests.Update(req.RequestId, request); err != nil {
+		return nil, status.Error(codes.Internal, "problem saving data")
+	}
+	return &requestspb.CompleteHelpResponse{}, nil
+}
+
+func (svc *Service) CancelHelp(ctx context.Context, req *requestspb.CancelHelpRequest) (*requestspb.CancelHelpResponse, error) {
+	request, err := svc.requests.Get(req.RequestId)
+	if err != nil {
+		return nil, status.Error(codes.NotFound, "request not found")
+	}
+
+	if request.State == requestspb.Request_COMPLETED {
+		return nil, status.Error(codes.InvalidArgument, "request can't be cancelled if it's been completed already")
+	}
+
+	request.State = requestspb.Request_CANCELLED
+
+	if err := svc.requests.Update(req.RequestId, request); err != nil {
+		return nil, status.Error(codes.Internal, "problem saving data")
+	}
+	return &requestspb.CancelHelpResponse{}, nil
+}
