@@ -3,12 +3,26 @@ syntax = "proto3";
 package requestspb;
 
 message Request {
+	enum State {
+		WAITING = 0;
+		ACCEPTED = 1;
+		COMPLETED = 2;
+		CANCELLED = 3;
+	}
+
+	message Answer {
+		string volunteer_id = 1;
+		string comment = 2;
+	}
+
 	string title = 1;
 	string body = 2;
 	string requester_id = 3;
-	string creation_date = 4;
-	string update_date = 5;
-	repeated string skills = 6;
+	string volunteer_id = 4;
+	string creation_date = 5;
+	State state = 6;
+	repeated string skills = 7;
+	repeated Answer answers = 8;
 }
 
 message GetVersionRequest {
@@ -54,6 +68,36 @@ message GetRequestsResponse {
 	Request request = 2;
 }
 
+message AnswerRequestRequest {
+	string request_id = 1;
+	Request.Answer answer = 2;
+}
+
+message AnswerRequestResponse {
+}
+
+message AcceptHelpRequest {
+	string request_id = 1;
+	string volunteer_id = 2;
+}
+
+message AcceptHelpResponse {
+}
+
+message CompleteHelpRequest {
+	string request_id = 1;
+}
+
+message CompleteHelpResponse {
+}
+
+message CancelHelpRequest {
+	string request_id = 1;
+}
+
+message CancelHelpResponse {
+}
+
 service RequestsRPC {
 	// Returns software version and build details
 	rpc GetVersion(GetVersionRequest) returns (GetVersionResponse);
@@ -70,5 +114,13 @@ service RequestsRPC {
 
 	// Returns all the users in the system
 	rpc GetRequests(GetRequestsRequest) returns (stream GetRequestsResponse);
+
+	rpc AnswerRequest(AnswerRequestRequest) returns (AnswerRequestResponse);
+
+	rpc AcceptHelp(AcceptHelpRequest) returns (AcceptHelpResponse);
+
+	rpc CompleteHelp(CompleteHelpRequest) returns (CompleteHelpResponse);
+
+	rpc CancelHelp(CancelHelpRequest) returns (CancelHelpResponse);
 }
 
