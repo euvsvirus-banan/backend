@@ -75,3 +75,30 @@ func (svc *Service) GetUsers(req *userspb.GetUsersRequest, stream userspb.UsersR
 	}
 	return nil
 }
+
+func (svc *Service) GetUserByID(ctx context.Context, req *userspb.GetUserByIDRequest) (*userspb.GetUserByIDResponse, error) {
+	user, err := svc.users.Get(req.UserId)
+	if err != nil {
+		return nil, status.Error(codes.NotFound, "user not found")
+	}
+	return &userspb.GetUserByIDResponse{
+		User: user,
+	}, nil
+}
+
+func (svc *Service) SearchUsersByPostcode(req *userspb.SearchUsersByPostcodeRequest, stream userspb.UsersRPC_SearchUsersByPostcodeServer) error {
+	for id, user := range svc.users.All() {
+		if user.Address.Postcode != req.Postcode {
+			continue
+		}
+		if err := stream.Send(
+			&userspb.SearchUsersByPostcodeResponse{
+				UserId: id,
+				User:   user,
+			},
+		); err != nil {
+			return status.Error(codes.Unknown, err.Error())
+		}
+	}
+	return nil
+}

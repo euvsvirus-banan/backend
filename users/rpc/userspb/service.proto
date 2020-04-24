@@ -73,6 +73,23 @@ message GetUsersResponse {
 	User user = 2;
 }
 
+message GetUserByIDRequest {
+	string user_id = 1;
+}
+
+message GetUserByIDResponse {
+	User user = 1;
+}
+
+message SearchUsersByPostcodeRequest {
+	string postcode = 1;
+}
+
+message SearchUsersByPostcodeResponse {
+	string user_id = 1;
+	User user = 2;
+}
+
 service UsersRPC {
 	// Returns software version and build details
 	rpc GetVersion(GetVersionRequest) returns (GetVersionResponse);
@@ -90,8 +107,7 @@ service UsersRPC {
 	// Returns all the users in the system
 	rpc GetUsers(GetUsersRequest) returns (stream GetUsersResponse);
 
-	// rpc SearchUserByGeography(SearchUserByGeographyRequest) returns (stream SearchUserByGeographyResponse);
-	// rpc SearchUserByName(SearchUserByNameRequest) returns (stream SearchUserByNameResponse);
-	// rpc SearchUserByContact(SearchUserByContactRequest) returns (stream SearchUserByContactResponse);
-	// rpc SearchUserBySkill(SearchUserBySkillRequest) returns (stream SearchUserBySkillResponse);
+	rpc GetUserByID(GetUserByIDRequest) returns (GetUserByIDResponse);
+
+	rpc SearchUsersByPostcode(SearchUsersByPostcodeRequest) returns (stream SearchUsersByPostcodeResponse);
 }

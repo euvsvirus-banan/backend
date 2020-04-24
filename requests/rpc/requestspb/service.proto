@@ -19,10 +19,11 @@ message Request {
 	string body = 2;
 	string requester_id = 3;
 	string volunteer_id = 4;
-	string creation_date = 5;
-	State state = 6;
-	repeated string skills = 7;
-	repeated Answer answers = 8;
+	string postcode = 5;
+	string creation_date = 6;
+	State state = 7;
+	repeated string skills = 8;
+	repeated Answer answers = 9;
 }
 
 message GetVersionRequest {
@@ -64,6 +65,23 @@ message GetRequestsRequest {
 }
 
 message GetRequestsResponse {
+	string request_id = 1;
+	Request request = 2;
+}
+
+message GetRequestByIDRequest {
+	string request_id = 1;
+}
+
+message GetRequestByIDResponse {
+	Request request = 1;
+}
+
+message SearchRequestsByPostcodeRequest {
+	string postcode = 1;
+}
+
+message SearchRequestsByPostcodeResponse {
 	string request_id = 1;
 	Request request = 2;
 }
@@ -114,6 +132,10 @@ service RequestsRPC {
 
 	// Returns all the users in the system
 	rpc GetRequests(GetRequestsRequest) returns (stream GetRequestsResponse);
+
+	rpc GetRequestByID(GetRequestByIDRequest) returns (GetRequestByIDResponse);
+
+	rpc SearchRequestsByPostcode(SearchRequestsByPostcodeRequest) returns (stream SearchRequestsByPostcodeResponse);
 
 	rpc AnswerRequest(AnswerRequestRequest) returns (AnswerRequestResponse);
 
