@@ -1,0 +1,22 @@
+{
+  "user": {
+    "name": "Pi the Dog",
+    "address": {
+      "address": "somewhere",
+      "city": "Stockholm",
+      "postcode": "12345",
+      "country": "Sweden"
+    },
+    "contactDetails": [
+      {
+        "platform": "FACEBOOK",
+        "identifier": "@pi"
+      }
+    ],
+    "skills": [
+      "eating",
+      "sleeping"
+    ]
+  }
+}
+

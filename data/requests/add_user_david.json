@@ -1,0 +1,24 @@
+{
+  "user": {
+    "name": "David BP",
+    "address": {
+      "address": "somewhere",
+      "city": "Stockholm",
+      "postcode": "12345",
+      "country": "Sweden"
+    },
+    "contactDetails": [
+      {
+        "identifier": "070123456"
+      },
+      {
+        "platform": "EMAIL",
+        "identifier": "asd@somewhere.com"
+      }
+    ],
+    "skills": [
+      "plumbing",
+      "fixing_printers"
+    ]
+  }
+}

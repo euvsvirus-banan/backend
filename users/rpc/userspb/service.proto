@@ -1,0 +1,97 @@
+syntax = "proto3";
+
+package userspb;
+
+message User {
+	message Address {
+		string address = 1;
+		string city = 2;
+		string postcode = 3;
+		string country = 4;
+	}
+
+	message ContactDetails {
+		enum Platform {
+			PHONE = 0;
+			EMAIL = 1;
+			WHATSAPP = 2;
+			FACEBOOK = 3;
+			TELEGRAM = 4;
+			SKYPE = 5;
+		}
+
+		Platform platform = 1;
+		string identifier = 2;
+	}
+
+	string name = 1;
+	Address address = 2;
+	repeated ContactDetails contact_details = 3;
+	repeated string skills = 4;
+}
+
+message GetVersionRequest {
+}
+
+message GetVersionResponse {
+	string project = 1;
+	string version = 2;
+	string build_date = 3;
+	string git_revision = 4;
+	string go_version = 5;
+}
+
+message AddUserRequest {
+	User user = 1;
+}
+
+message AddUserResponse {
+	string user_id = 1;
+}
+
+message DeleteUserRequest {
+	string user_id = 1;
+}
+
+message DeleteUserResponse {
+}
+
+message UpdateUserRequest {
+	string user_id = 1;
+	User user = 2;
+}
+
+message UpdateUserResponse {
+	User user = 1;
+}
+
+message GetUsersRequest {
+}
+
+message GetUsersResponse {
+	string user_id = 1;
+	User user = 2;
+}
+
+service UsersRPC {
+	// Returns software version and build details
+	rpc GetVersion(GetVersionRequest) returns (GetVersionResponse);
+
+	// Adds a new user
+	rpc AddUser(AddUserRequest) returns (AddUserResponse);
+
+	// Deletes an existing user
+	rpc DeleteUser(DeleteUserRequest) returns (DeleteUserResponse);
+
+	// Updates an existing user, method requires passing all the information about the user as
+	// the object is simply replaced
+	rpc UpdateUser(UpdateUserRequest) returns (UpdateUserResponse);
+
+	// Returns all the users in the system
+	rpc GetUsers(GetUsersRequest) returns (stream GetUsersResponse);
+
+	// rpc SearchUserByGeography(SearchUserByGeographyRequest) returns (stream SearchUserByGeographyResponse);
+	// rpc SearchUserByName(SearchUserByNameRequest) returns (stream SearchUserByNameResponse);
+	// rpc SearchUserByContact(SearchUserByContactRequest) returns (stream SearchUserByContactResponse);
+	// rpc SearchUserBySkill(SearchUserBySkillRequest) returns (stream SearchUserBySkillResponse);
+}
