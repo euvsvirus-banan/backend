@@ -1,0 +1,91 @@
+syntax = "proto3";
+
+package newspb;
+
+message News {
+	string title = 1;
+	string body = 2;
+	string postcode = 3;
+}
+
+message GetVersionRequest {
+}
+
+message GetVersionResponse {
+	string project = 1;
+	string version = 2;
+	string build_date = 3;
+	string git_revision = 4;
+	string go_version = 5;
+}
+
+message AddNewRequest {
+	News new = 1;
+}
+
+message AddNewResponse {
+	string new_id = 1;
+}
+
+message DeleteNewRequest {
+	string new_id = 1;
+}
+
+message DeleteNewResponse {
+}
+
+message UpdateNewRequest {
+	string new_id = 1;
+	News new = 2;
+}
+
+message UpdateNewResponse {
+	News new = 1;
+}
+
+message GetNewsRequest {
+}
+
+message GetNewsResponse {
+	string new_id = 1;
+	News new = 2;
+}
+
+message GetNewsByIDRequest {
+	string news_id = 1;
+}
+
+message GetNewsByIDResponse {
+	News news = 1;
+}
+
+message SearchNewsByPostcodeRequest {
+	string postcode = 1;
+}
+
+message SearchNewsByPostcodeResponse {
+	string news_id = 1;
+	News news = 2;
+}
+
+service NewsRPC {
+	// Returns software version and build details
+	rpc GetVersion(GetVersionRequest) returns (GetVersionResponse);
+
+	// Adds a new new
+	rpc AddNew(AddNewRequest) returns (AddNewResponse);
+
+	// Deletes an existing new
+	rpc DeleteNew(DeleteNewRequest) returns (DeleteNewResponse);
+
+	// Updates an existing new, method requires passing all the information about the new as
+	// the object is simply replaced
+	rpc UpdateNew(UpdateNewRequest) returns (UpdateNewResponse);
+
+	// Returns all the news in the system
+	rpc GetNews(GetNewsRequest) returns (stream GetNewsResponse);
+
+	rpc GetNewsByID(GetNewsByIDRequest) returns (GetNewsByIDResponse);
+
+	rpc SearchNewsByPostcode(SearchNewsByPostcodeRequest) returns (stream SearchNewsByPostcodeResponse);
+}

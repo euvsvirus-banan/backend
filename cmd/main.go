@@ -10,6 +10,8 @@ import (
 	"os"
 
 	"github.com/euvsvirus-banan/backend/internal/storage"
+	newsService "github.com/euvsvirus-banan/backend/news/pkg/service"
+	"github.com/euvsvirus-banan/backend/news/rpc/newspb"
 	requestsService "github.com/euvsvirus-banan/backend/requests/pkg/service"
 	"github.com/euvsvirus-banan/backend/requests/rpc/requestspb"
 	usersService "github.com/euvsvirus-banan/backend/users/pkg/service"
@@ -33,7 +35,7 @@ func getLogger(debug bool) *logrus.Entry { // nolint: unparam
 	return logrus.NewEntry(l)
 }
 
-func startService(logger *logrus.Entry, addr string, userData *storage.UsersStorage, requestData *storage.RequestsStorage) error {
+func startService(logger *logrus.Entry, addr string, userData *storage.UsersStorage, requestData *storage.RequestsStorage, newsData *storage.NewsStorage) error {
 	logger.WithFields(
 		logrus.Fields{
 			"addr": addr,
@@ -63,6 +65,9 @@ func startService(logger *logrus.Entry, addr string, userData *storage.UsersStor
 
 	requestsSvc := requestsService.New(logger, requestData)
 	requestspb.RegisterRequestsRPCServer(grpcServer, requestsSvc)
+
+	newsSvc := newsService.New(logger, newsData)
+	newspb.RegisterNewsRPCServer(grpcServer, newsSvc)
 
 	reflection.Register(grpcServer)
 
@@ -98,11 +103,25 @@ func getRequestData(file io.ReadWriteSeeker) (*storage.RequestsStorage, error) {
 	return st, nil
 }
 
+func getNewsData(file io.ReadWriteSeeker) (*storage.NewsStorage, error) {
+	data := make(map[string]*newspb.News)
+	b, err := ioutil.ReadAll(file)
+	if err != nil {
+		return nil, fmt.Errorf("problem trying to read new data file: %w", err)
+	}
+	if err := json.Unmarshal(b, &data); err != nil {
+		return nil, fmt.Errorf("problem unmarshalling new data: %w", err)
+	}
+	st := storage.NewNewsStorage(file, data)
+	return st, nil
+}
+
 func main() {
 	debug := flag.Bool("debug", false, "Enable debug mode")
 	addr := flag.String("addr", "127.0.0.1:65010", "Address to bind the service to")
 	usersFilePath := flag.String("users-file", "/euvsvirus-backend/users.json", "File to store user information")
 	requestsFilePath := flag.String("requests-file", "/euvsvirus-backend/requests.json", "File to store request information")
+	newsFilePath := flag.String("news-file", "/euvsvirus-backend/news.json", "File to store news information")
 
 	flag.Parse()
 
@@ -132,11 +151,24 @@ func main() {
 		os.Exit(1)
 	}
 
+	newsFile, err := os.OpenFile(*newsFilePath, os.O_RDWR, 0644)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+	defer newsFile.Close()
+	newsData, err := getNewsData(newsFile)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
 	if err := startService(
 		logger,
 		*addr,
 		userData,
 		requestData,
+		newsData,
 	); err != nil {
 		logger.Error(err)
 		os.Exit(1)
