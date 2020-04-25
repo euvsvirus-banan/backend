@@ -1,5 +1,7 @@
 # vim: filetype=dockerfile
 FROM golang:1.14 as builder
+
+ARG PKG
 WORKDIR /go/src/${PKG}
 ADD . .
 RUN make build
