@@ -53,6 +53,15 @@ protobuf:
 				--proto_path=. \
 				--gofast_out=plugins=grpc:. \
 				requests/rpc/requestspb/service.proto
+	docker run \
+		-v $(PWD):/go/src/$(PKG) \
+		-w /go/src/$(PKG) \
+		protobuf-${NAME} \
+			protoc \
+				--proto_path=. \
+				--gofast_out=plugins=grpc:. \
+				news/rpc/newspb/service.proto
+
 
 
 .PHONY: docker-build
